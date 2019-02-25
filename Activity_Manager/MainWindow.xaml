@@ -6,11 +6,20 @@
         xmlns:local="clr-namespace:Activity_Manager"
         mc:Ignorable="d"
         Title="Activity Manager" Height="450" Width="800">
-    <Grid>
-        <Menu x:Name="menu" HorizontalAlignment="Left" Height="35" Margin="10,10,0,0" VerticalAlignment="Top" Width="772">
-            <MenuItem InputGestureText="File" StaysOpenOnClick="True" Width="60" Height="25" Background="#FFAAA7A7" BorderBrush="#FF424242" Header="File" Cursor="None"/>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="Open" />
+                <MenuItem Header="Save" />
+                <MenuItem Header="Import" />
+                <MenuItem Header="Export" />
+                <MenuItem Header="Exit" /> 
+            </MenuItem>
+            <MenuItem Header="_Tools"> 
+                <MenuItem Header="Option" />
+                <MenuItem Header="About" /> 
+            </MenuItem> 
         </Menu>
-
-
-    </Grid>
+        <TextBox AcceptsReturn="True" /> 
+    </DockPanel> 
 </Window>
