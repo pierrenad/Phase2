@@ -7,19 +7,29 @@
         mc:Ignorable="d"
         Title="Activity Manager" Height="450" Width="800">
     <DockPanel>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="Open" />
-                <MenuItem Header="Save" />
-                <MenuItem Header="Import" />
-                <MenuItem Header="Export" />
-                <MenuItem Header="Exit" /> 
+        <Menu x:Name="Menu" DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Open"/>
+                <MenuItem Header="Save"/>
+                <MenuItem Header="Import"/>
+                <MenuItem Header="Export"/>
+                <MenuItem Header="Exit"/>
             </MenuItem>
-            <MenuItem Header="_Tools"> 
+            <MenuItem Header="Tools">
                 <MenuItem Header="Option" />
-                <MenuItem Header="About" /> 
-            </MenuItem> 
+                <MenuItem Header="About" Click="About_Click" />
+            </MenuItem>
         </Menu>
-        <TextBox AcceptsReturn="True" /> 
+
+        <ToolBar DockPanel.Dock="Top">
+            <Button Name="Creer" Content="Créer une activité"/>
+            <Button Name="Supprimer" Content="Supprimer une activité"/>
+            <Button Name="Modifier" Content="Modifier une activité"/> 
+        </ToolBar>
+
+        <Grid>
+
+            <GridSplitter HorizontalAlignment="Center"/> 
+        </Grid>
     </DockPanel> 
 </Window>

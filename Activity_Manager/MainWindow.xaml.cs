@@ -25,5 +25,10 @@ namespace Activity_Manager
         {
             InitializeComponent();
         }
+
+        private void About_Click(object sender, RoutedEventArgs e)   // clic sur about dans file 
+        {
+            MessageBox.Show("Fait par Pierre Nadin \nCopyright HEPL \nQ2 2018-2019", "About", MessageBoxButton.OK); 
+        }
     }
 }
