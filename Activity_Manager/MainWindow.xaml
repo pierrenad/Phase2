@@ -21,15 +21,13 @@
             </MenuItem>
         </Menu>
 
-        <ToolBar DockPanel.Dock="Top">
-            <Button Name="Creer" Content="Créer une activité"/>
-            <Button Name="Supprimer" Content="Supprimer une activité"/>
-            <Button Name="Modifier" Content="Modifier une activité"/> 
+        <ToolBar x:Name="ToolBar" DockPanel.Dock="Top">
+            <Button Name="Creer" Width="65" Content="Créer"/>
+            <Button Name="Supprimer" Width="65" Content="Supprimer"/>
+            <Button Name="Modifier" Width="65" Content="Modifier"/>
         </ToolBar>
-
-        <Grid>
-
-            <GridSplitter HorizontalAlignment="Center"/> 
-        </Grid>
+        
+        <Label x:Name="NomActivite" Content="Nom activité" Height="374" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        
     </DockPanel> 
 </Window>
