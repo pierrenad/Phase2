@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Phase2\Application.csproj", "{C48140DD-082B-4964-9AFB-F59D19DDE367}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Activite", "Phase2\Activite.csproj", "{C48140DD-082B-4964-9AFB-F59D19DDE367}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Activity_Manager", "Activity_Manager\Activity_Manager.csproj", "{345B3B75-110D-474E-9D22-7467B12CAC63}"
 EndProject

@@ -53,11 +53,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Activity_Manager\Activity_Manager.csproj">
-      <Project>{345b3b75-110d-474e-9d22-7467b12cac63}</Project>
-      <Name>Activity_Manager</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

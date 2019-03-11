@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Activity_Manager"
         mc:Ignorable="d"
-        Title="Activity Manager" Height="500" Width="800">
+        Title="Activity Manager" Height="600" Width="1100">
 
     <DockPanel x:Name="PanelDepart" Background="#FFBEBEBE">
         <Menu x:Name="Menu" DockPanel.Dock="Top">
@@ -23,7 +23,7 @@
         </Menu>
 
         <ToolBar x:Name="ToolBar" DockPanel.Dock="Top">
-            <Button Name="Creer" Width="65" Content="Créer"/>
+            <Button Name="Creer" Width="65" Content="Créer" Click="Creer_Click"/>
             <Button Name="Supprimer" Width="65" Content="Supprimer"/>
             <Button Name="Modifier" Width="65" Content="Modifier"/>
         </ToolBar>
@@ -38,7 +38,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Grid x:Name="GridGauche" Grid.Column="0" Grid.Row="0" Background="#BF967878" Width="395" Margin="0,0,0,39" Grid.RowSpan="2">
+            <Grid x:Name="GridGauche" Grid.Column="0" Grid.Row="0" Background="#BF967878" Margin="0,0,0,39" Grid.RowSpan="2">
                 <Label x:Name="LabelActivite" Content="Créer une activité" FontSize="20" VerticalAlignment="Top" Height="40"/>
                 <Label x:Name="Intitule" Content="Intitulé" VerticalAlignment="Top" Height="25" Margin="0,40,0,0"/>
                 <TextBox x:Name="TextIntitule" VerticalAlignment="Top" Height="20" Margin="0,65,0,0"/>
@@ -59,28 +59,29 @@
                     <ComboBoxItem Content="Mensuelle"/>
                     <ComboBoxItem Content="Annuelle"/>
                 </ComboBox>
+                <Button x:Name="Annulation" Content="Annuler" FontSize="25" Height="35" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,380,0,0" Click="Annulation_Click"/>
             </Grid>
 
-            <Grid x:Name="GridSplitter" VerticalAlignment="Top" >
+            <Grid x:Name="GridSplitter" Grid.RowSpan="2" >
                 <GridSplitter x:Name="GridSplitterCentre" Width="5"/>
             </Grid>
 
             <Grid x:Name="GridDroite" Grid.Column="1" Grid.Row="0" Background="#A5967878" VerticalAlignment="Top">
                 <ListBox x:Name="ListActivites" Background="#A5967878">
-                    <ListBoxItem>Test</ListBoxItem>
-                    <ListBoxItem>Test</ListBoxItem>
+                    <!-- <ListBoxItem>Test</ListBoxItem>
+                    <ListBoxItem>Test</ListBoxItem> --> 
                 </ListBox>
             </Grid>
 
-            <DataGrid x:Name="TabActivites" Grid.Column="1" Grid.Row="1" Background="#A5967878"> 
+            <DataGrid x:Name="TabActivites" Grid.Column="1" Grid.Row="1" Background="#A5967878">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="50" Header="Intitulé" MinWidth="50" CanUserReorder="False"/>
-                    <DataGridTextColumn Width="50" Header="Description" MinWidth="50" CanUserReorder="False"/>
-                    <DataGridTextColumn Width="50" Header="Lieu" MinWidth="50" CanUserReorder="False"/>
-                    <DataGridTextColumn Width="50" Header="Date Début" MinWidth="50" CanUserReorder="False"/>
-                    <DataGridTextColumn Width="50" Header="Date Fin" MinWidth="50" CanUserReorder="False"/>
-                    <DataGridTextColumn Width="50" Header="Occurences" MinWidth="50" CanUserReorder="False"/>
-                    <DataGridTextColumn Width="50" Header="Périodicité" MinWidth="50" CanUserReorder="False"/>
+                    <DataGridTextColumn Width="75" Header="Intitulé" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
+                    <DataGridTextColumn Width="75" Header="Description" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
+                    <DataGridTextColumn Width="75" Header="Lieu" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
+                    <DataGridTextColumn Width="75" Header="Date Début" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
+                    <DataGridTextColumn Width="75" Header="Date Fin" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
+                    <DataGridTextColumn Width="75" Header="Occurences" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
+                    <DataGridTextColumn Width="75" Header="Périodicité" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
                 </DataGrid.Columns>
 
             </DataGrid>

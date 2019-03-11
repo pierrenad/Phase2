@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phase2
+namespace ClassActivity 
 {
-    class Activity
+    public class Activity : IComparable<Activity> 
     {
         #region VARIABLES 
-        public enum periodicite { quotidienne, hebdomadaire, mensuelle, annuelle }; 
+        public enum periodicite { quotidienne, hebdomadaire, mensuelle, annuelle, nulle }; 
         private string _intitule;
         private string _description;
         private string _lieu;
@@ -60,9 +60,51 @@ namespace Phase2
         {
             get { return _periodicite; }
             set { _periodicite = value; } 
-        } 
-        #endregion 
+        }
 
+        public Activity()
+        {
+            Intitule = null;
+            Description = null;
+            Lieu = null;
+            DateHeureDebut = new DateTime();
+            DateHeureFin = new DateTime();
+            Occurences = 0;
+            Periodicite = periodicite.nulle; 
+        }
+
+        public Activity(string intitule, string description, string lieu, DateTime dateDebut, DateTime dateFin, int occur, string period)
+        {
+            Intitule = intitule;
+            Description = description;
+            Lieu = lieu;
+            DateHeureDebut = dateDebut;
+            DateHeureFin = dateFin;
+            Occurences = occur;
+            switch (period)
+            {
+                case "Quotidienne": 
+                    Periodicite = periodicite.quotidienne;
+                    break;
+                case "Hebdomadaire":
+                    Periodicite = periodicite.hebdomadaire;
+                    break;
+                case "Mensuel":
+                    Periodicite = periodicite.mensuelle; 
+                    break;
+                case "Annuel":
+                    Periodicite = periodicite.annuelle; 
+                    break;
+            }
+        }
+        #endregion
+
+        #region METHODES 
+        public int CompareTo(Activity other)
+        {
+            return DateHeureDebut.CompareTo(other.DateHeureDebut); 
+        }
+        #endregion
 
     }
 }
