@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel; 
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace Activity_Manager
     /// </summary>
     public partial class MainWindow : Window
     {
+        ObservableCollection<Activity> listAct = new ObservableCollection<Activity>(); // création d'une liste d'activités avec laquelle travailler 
+
         public MainWindow()
         {
             InitializeComponent();
@@ -36,16 +39,27 @@ namespace Activity_Manager
         {
             if (TextIntitule.Text != "" && TextDescription.Text != "" && TextLieu.Text != "" && TextDateDebut.Text != "" && TextDateFin.Text != "" && TextOccurences.Text != "" && BoxPeriodicite.Text != "")
             {
-                if(Convert.ToDateTime(TextDateDebut.Text) < Convert.ToDateTime(TextDateFin.Text))
+                if (Convert.ToDateTime(TextDateDebut.Text) < Convert.ToDateTime(TextDateFin.Text))
                 {
                     Activity nouvact = new Activity(TextIntitule.Text, TextDescription.Text, TextLieu.Text, Convert.ToDateTime(TextDateDebut.Text), Convert.ToDateTime(TextDateFin.Text), Convert.ToInt32(TextOccurences.Text), BoxPeriodicite.Text);
+                    listAct.Add(nouvact);   // ajout dans la liste 
+                    //listAct.Sort();
 
-                    TabActivites.ItemsSource = nouvact.Lieu;
+                    // on met à jour la liste dans le tableau (datagrid) 
+                    TabActivites.ItemsSource = listAct; 
                     TabActivites.Items.Refresh();
 
-                    ListActivites.Items.Add(nouvact.Intitule);
-                    ViderChamps(); 
+                    // on ajoute le nom de l'activité dans la liste des activités (listbox) 
+                    foreach (Activity a in listAct)
+                    {
+                        ListActivites.Items.Add(a.Intitule);
+                    }
+                    
+                    // nettoyer les entrées 
+                    ViderChamps();
                 }
+                else
+                    MessageBox.Show("Incohérence entre la date de début et la date de fin", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error); 
             }
             else
                 MessageBox.Show("Veuillez remplir les champs pour créer une activité","Erreur",MessageBoxButton.OK, MessageBoxImage.Error); 
@@ -56,7 +70,7 @@ namespace Activity_Manager
             ViderChamps(); 
         }
 
-        public void ViderChamps()
+        public void ViderChamps()   // nettoyer les champs des entrées 
         {
             TextIntitule.Text = "";
             TextDescription.Text = "";
