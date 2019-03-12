@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClassActivity 
 {
-    public class Activity : IComparable<Activity> 
+    public class Activity : IComparable<Activity>  
     {
         #region VARIABLES 
         public enum periodicite { quotidienne, hebdomadaire, mensuelle, annuelle, nulle }; 
@@ -103,7 +103,8 @@ namespace ClassActivity
         public int CompareTo(Activity other)
         {
             return DateHeureDebut.CompareTo(other.DateHeureDebut); 
-        }
+        } 
+
         #endregion
 
     }

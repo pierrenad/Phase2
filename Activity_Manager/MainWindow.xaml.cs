@@ -28,8 +28,10 @@ namespace Activity_Manager
         public MainWindow()
         {
             InitializeComponent();
+            TabActivites.DataContext = listAct; // on a listAct dans le datagrid et se met toujours a jour (prend le nom des propriétés pour les headers) 
         }
 
+        #region METHODES_CLICK
         private void About_Click(object sender, RoutedEventArgs e)   // clic sur about dans file 
         {
             MessageBox.Show("Fait par Pierre Nadin \nCopyright HEPL \nQ2 2018-2019", "About", MessageBoxButton.OK, MessageBoxImage.Information); 
@@ -42,12 +44,14 @@ namespace Activity_Manager
                 if (Convert.ToDateTime(TextDateDebut.Text) < Convert.ToDateTime(TextDateFin.Text))
                 {
                     Activity nouvact = new Activity(TextIntitule.Text, TextDescription.Text, TextLieu.Text, Convert.ToDateTime(TextDateDebut.Text), Convert.ToDateTime(TextDateFin.Text), Convert.ToInt32(TextOccurences.Text), BoxPeriodicite.Text);
-                    listAct.Add(nouvact);   // ajout dans la liste 
-                    //listAct.Sort();
 
-                    // on met à jour la liste dans le tableau (datagrid) 
-                    TabActivites.ItemsSource = listAct; 
-                    TabActivites.Items.Refresh();
+                    // supprime les éléments de la listBox 
+                    foreach (Activity a in listAct)
+                    {
+                        ListActivites.Items.Remove(a.Intitule); 
+                    }
+
+                    listAct.Add(nouvact);   // ajout dans la liste 
 
                     // on ajoute le nom de l'activité dans la liste des activités (listbox) 
                     foreach (Activity a in listAct)
@@ -65,11 +69,26 @@ namespace Activity_Manager
                 MessageBox.Show("Veuillez remplir les champs pour créer une activité","Erreur",MessageBoxButton.OK, MessageBoxImage.Error); 
         }
 
+        private void Supprimer_Click(object sender, RoutedEventArgs e)
+        {
+            RecupInfoListAct(listAct);
+            ViderChamps();
+            //ListActivites.  // data binding pour plus facile (peut etre classe pour gerer liste) 
+        }
+
         private void Annulation_Click(object sender, RoutedEventArgs e) // clic bouton Annuler 
         {
             ViderChamps(); 
         }
 
+        private void ListActivites_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            RecupInfoListAct(listAct); 
+        }
+
+        #endregion
+
+        #region METHODES_AUTRES 
         public void ViderChamps()   // nettoyer les champs des entrées 
         {
             TextIntitule.Text = "";
@@ -80,5 +99,23 @@ namespace Activity_Manager
             TextOccurences.Text = "";
             BoxPeriodicite.Text = "";
         }
+
+        public void RecupInfoListAct(ObservableCollection<Activity> liste) 
+        {
+            foreach (Activity a in liste) 
+            {
+                if (ListActivites.SelectedItem.Equals(a.Intitule))
+                {
+                    TextIntitule.Text = a.Intitule;
+                    TextDescription.Text = a.Description;
+                    TextLieu.Text = a.Lieu;
+                    TextDateDebut.Text = Convert.ToString(a.DateHeureDebut);
+                    TextDateFin.Text = Convert.ToString(a.DateHeureFin);
+                    TextOccurences.Text = Convert.ToString(a.Occurences);
+                    BoxPeriodicite.Text = a.Periodicite.ToString();
+                }
+            }
+        }
+        #endregion 
     }
 }

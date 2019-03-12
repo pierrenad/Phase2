@@ -24,15 +24,16 @@
 
         <ToolBar x:Name="ToolBar" DockPanel.Dock="Top">
             <Button Name="Creer" Width="65" Content="Créer" Click="Creer_Click"/>
-            <Button Name="Supprimer" Width="65" Content="Supprimer"/>
+            <Button Name="Supprimer" Width="65" Content="Supprimer" Click="Supprimer_Click"/>
             <Button Name="Modifier" Width="65" Content="Modifier"/>
         </ToolBar>
+        
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-
+            
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -54,10 +55,10 @@
                 <TextBox x:Name="TextOccurences" VerticalAlignment="Top" Height="25" Margin="0,290,0,0"/>
                 <Label x:Name="Periodicite" Content="Periodicité" VerticalAlignment="Top" Height="30" Margin="0,315,0,0"/>
                 <ComboBox x:Name="BoxPeriodicite" VerticalAlignment="Top" Height="25" Margin="0,345,0,0">
-                    <ComboBoxItem Content="Quotidienne"/>
-                    <ComboBoxItem Content="Hebdomadaire"/>
-                    <ComboBoxItem Content="Mensuelle"/>
-                    <ComboBoxItem Content="Annuelle"/>
+                    <ComboBoxItem Content="quotidienne"/>
+                    <ComboBoxItem Content="hebdomadaire"/>
+                    <ComboBoxItem Content="mensuelle"/>
+                    <ComboBoxItem Content="annuelle"/>
                 </ComboBox>
                 <Button x:Name="Annulation" Content="Annuler" FontSize="25" Height="35" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,420,0,0" Click="Annulation_Click"/>
             </Grid>
@@ -67,15 +68,11 @@
             </Grid>
 
             <Grid x:Name="GridDroite" Grid.Column="1" Grid.Row="0" Background="#A5967878" VerticalAlignment="Top">
-                <ListBox x:Name="ListActivites" Background="#A5967878">
-                    <!-- <ListBoxItem>Test</ListBoxItem>
-                    <ListBoxItem>Test</ListBoxItem> --> 
-                </ListBox>
-
+                <ListBox x:Name="ListActivites" Background="#A5967878" MouseDoubleClick="ListActivites_MouseDoubleClick"/>
             </Grid>
 
-            <DataGrid x:Name="TabActivites" Grid.Column="1" Grid.Row="1" Background="#A5967878">
-                <DataGrid.Columns>
+            <DataGrid x:Name="TabActivites" Grid.Column="1" Grid.Row="1" Background="#A5967878" ItemsSource="{Binding}">
+                <!--<DataGrid.Columns>
                     <DataGridTextColumn Width="75" Header="Intitulé" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
                     <DataGridTextColumn Width="75" Header="Description" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
                     <DataGridTextColumn Width="75" Header="Lieu" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
@@ -83,8 +80,7 @@
                     <DataGridTextColumn Width="75" Header="Date Fin" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
                     <DataGridTextColumn Width="75" Header="Occurences" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
                     <DataGridTextColumn Width="75" Header="Périodicité" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
-                </DataGrid.Columns>
-
+                </DataGrid.Columns>     (Géré dans le .cs dans main)-->
             </DataGrid>
         </Grid>
     </DockPanel>
