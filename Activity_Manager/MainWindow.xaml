@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Activity_Manager"
         mc:Ignorable="d"
-        Title="Activity Manager" Height="600" Width="1100">
+        Title="Activity Manager" Height="600" Width="1150">
 
     <DockPanel x:Name="PanelDepart" Background="#FFBEBEBE">
         <Menu x:Name="Menu" DockPanel.Dock="Top">
@@ -25,7 +25,7 @@
         <ToolBar x:Name="ToolBar" DockPanel.Dock="Top">
             <Button Name="Creer" Width="65" Content="Créer" Click="Creer_Click"/>
             <Button Name="Supprimer" Width="65" Content="Supprimer" Click="Supprimer_Click"/>
-            <Button Name="Modifier" Width="65" Content="Modifier"/>
+            <Button Name="Modifier" Width="65" Content="Modifier" Click="Modifier_Click"/>
         </ToolBar>
         
         <Grid>
@@ -63,9 +63,9 @@
                 <Button x:Name="Annulation" Content="Annuler" FontSize="25" Height="35" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,420,0,0" Click="Annulation_Click"/>
             </Grid>
 
-            <Grid x:Name="GridSplitter" Grid.RowSpan="2" >
+            <!--<Grid x:Name="GridSplitter" Grid.RowSpan="2" >
                 <GridSplitter x:Name="GridSplitterCentre" Width="5"/>
-            </Grid>
+            </Grid>-->
 
             <Grid x:Name="GridDroite" Grid.Column="1" Grid.Row="0" Background="#A5967878" VerticalAlignment="Top">
                 <ListBox x:Name="ListActivites" Background="#A5967878" MouseDoubleClick="ListActivites_MouseDoubleClick"/>

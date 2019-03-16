@@ -83,16 +83,16 @@ namespace ClassActivity
             Occurences = occur;
             switch (period)
             {
-                case "Quotidienne": 
+                case "quotidienne": 
                     Periodicite = periodicite.quotidienne;
                     break;
-                case "Hebdomadaire":
+                case "hebdomadaire":
                     Periodicite = periodicite.hebdomadaire;
                     break;
-                case "Mensuel":
+                case "mensuelle":
                     Periodicite = periodicite.mensuelle; 
                     break;
-                case "Annuel":
+                case "annuelle":
                     Periodicite = periodicite.annuelle; 
                     break;
             }
@@ -100,6 +100,40 @@ namespace ClassActivity
         #endregion
 
         #region METHODES 
+        public static String PeriodicityToString(periodicite p)
+        {
+            switch(p)
+            {
+                case periodicite.annuelle:
+                    return "annuelle"; 
+                case periodicite.mensuelle:
+                    return "mensuelle";
+                case periodicite.hebdomadaire:
+                    return "hebdomadaire";
+                case periodicite.quotidienne:
+                    return "quotidienne";
+                default:
+                    return ""; 
+            }
+        }
+
+        public static periodicite StringToPeriodicite(String s)
+        {
+            switch(s)
+            {
+                case "annuelle":
+                    return periodicite.annuelle;
+                case "mensuelle":
+                    return periodicite.mensuelle;
+                case "hebdomadaire":
+                    return periodicite.hebdomadaire;
+                case "quotidienne":
+                    return periodicite.quotidienne; 
+                default:
+                    return periodicite.nulle; 
+            }
+        }
+
         public int CompareTo(Activity other)
         {
             return DateHeureDebut.CompareTo(other.DateHeureDebut); 

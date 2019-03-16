@@ -31,27 +31,34 @@ namespace Activity_Manager
             TabActivites.DataContext = listAct; // on a listAct dans le datagrid et se met toujours a jour (prend le nom des propriétés pour les headers) 
         }
 
-        #region METHODES_CLICK
+        #region MENU 
         private void About_Click(object sender, RoutedEventArgs e)   // clic sur about dans file 
         {
             MessageBox.Show("Fait par Pierre Nadin \nCopyright HEPL \nQ2 2018-2019", "About", MessageBoxButton.OK, MessageBoxImage.Information); 
         }
+        #endregion
 
+        #region TOOLBAR 
         private void Creer_Click(object sender, RoutedEventArgs e)  // clic sur créer une activité 
         {
             if (TextIntitule.Text != "" && TextDescription.Text != "" && TextLieu.Text != "" && TextDateDebut.Text != "" && TextDateFin.Text != "" && TextOccurences.Text != "" && BoxPeriodicite.Text != "")
             {
                 if (Convert.ToDateTime(TextDateDebut.Text) < Convert.ToDateTime(TextDateFin.Text))
                 {
-                    Activity nouvact = new Activity(TextIntitule.Text, TextDescription.Text, TextLieu.Text, Convert.ToDateTime(TextDateDebut.Text), Convert.ToDateTime(TextDateFin.Text), Convert.ToInt32(TextOccurences.Text), BoxPeriodicite.Text);
-
                     // supprime les éléments de la listBox 
                     foreach (Activity a in listAct)
                     {
                         ListActivites.Items.Remove(a.Intitule); 
                     }
 
-                    listAct.Add(nouvact);   // ajout dans la liste 
+                    // ajout dans la liste d'une nouvelle activité 
+                    listAct.Add(new Activity
+                    {
+                        Intitule = TextIntitule.Text, Description = TextDescription.Text,
+                        Lieu = TextLieu.Text, DateHeureDebut = Convert.ToDateTime(TextDateDebut.Text),
+                        DateHeureFin = Convert.ToDateTime(TextDateFin.Text), Occurences = Convert.ToInt32(TextOccurences.Text),
+                        Periodicite = Activity.StringToPeriodicite(BoxPeriodicite.Text)
+                    });   
 
                     // on ajoute le nom de l'activité dans la liste des activités (listbox) 
                     foreach (Activity a in listAct)
@@ -71,24 +78,61 @@ namespace Activity_Manager
 
         private void Supprimer_Click(object sender, RoutedEventArgs e)
         {
-            RecupInfoListAct(listAct);
-            ViderChamps();
-            //ListActivites.  // data binding pour plus facile (peut etre classe pour gerer liste) 
+            RecupInfoListAct(listAct);  // récupérer les infos de l'activité choisie 
+
+            // supprimer l'acticité de la listAct
+            foreach (Activity a in listAct)
+            {
+                if (ListActivites.SelectedItem.Equals(a.Intitule))
+                {
+                    listAct.Remove(a);
+                    break; 
+                }
+            }
+
+            // supprime les éléments de la listBox 
+            ListActivites.Items.Clear(); 
+
+            // on remet la listActivites a jour 
+            foreach (Activity a in listAct)
+            {
+                ListActivites.Items.Add(a.Intitule); 
+            }
+
+            ViderChamps();  // on vide les champs de l'activité 
+        }
+
+        private void Modifier_Click(object sender, RoutedEventArgs e)
+        {
+            // cherche l'activité dans la liste pour la modifier mais modifie pas 
+            foreach (Activity a in listAct)
+            {
+                if (ListActivites.SelectedItem.Equals(a.Intitule))
+                {
+                    a.Intitule = TextIntitule.Text;
+                    a.Description = TextDescription.Text;
+                    a.Lieu = TextLieu.Text;
+                    a.DateHeureDebut = Convert.ToDateTime(TextDateDebut.Text);
+                    a.DateHeureFin = Convert.ToDateTime(TextDateFin.Text);
+                    a.Occurences = Convert.ToInt32(TextOccurences.Text);
+                    a.Periodicite = Activity.StringToPeriodicite(BoxPeriodicite.Text); 
+                }
+            }
+
         }
 
         private void Annulation_Click(object sender, RoutedEventArgs e) // clic bouton Annuler 
         {
             ViderChamps(); 
         }
+        #endregion
 
+        #region AUTRES_METHODES
         private void ListActivites_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             RecupInfoListAct(listAct); 
         }
 
-        #endregion
-
-        #region METHODES_AUTRES 
         public void ViderChamps()   // nettoyer les champs des entrées 
         {
             TextIntitule.Text = "";
@@ -116,6 +160,7 @@ namespace Activity_Manager
                 }
             }
         }
-        #endregion 
+        #endregion
+
     }
 }
