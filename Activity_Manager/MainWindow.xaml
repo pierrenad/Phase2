@@ -71,7 +71,7 @@
                 <ListBox x:Name="ListActivites" Background="#A5967878" MouseDoubleClick="ListActivites_MouseDoubleClick"/>
             </Grid>
 
-            <DataGrid x:Name="TabActivites" Grid.Column="1" Grid.Row="1" Background="#A5967878" ItemsSource="{Binding}">
+            <DataGrid x:Name="TabActivites" Grid.Column="1" Grid.Row="1" Background="#A5967878" ItemsSource="{Binding}" IsReadOnly="True" MinWidth="50">
                 <!--<DataGrid.Columns>
                     <DataGridTextColumn Width="75" Header="Intitulé" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
                     <DataGridTextColumn Width="75" Header="Description" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>

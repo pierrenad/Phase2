@@ -110,15 +110,28 @@ namespace Activity_Manager
                 if (ListActivites.SelectedItem.Equals(a.Intitule))
                 {
                     a.Intitule = TextIntitule.Text;
-                    a.Description = TextDescription.Text;
+                    a.Description = TextDescription.Text; 
                     a.Lieu = TextLieu.Text;
                     a.DateHeureDebut = Convert.ToDateTime(TextDateDebut.Text);
                     a.DateHeureFin = Convert.ToDateTime(TextDateFin.Text);
                     a.Occurences = Convert.ToInt32(TextOccurences.Text);
-                    a.Periodicite = Activity.StringToPeriodicite(BoxPeriodicite.Text); 
+                    a.Periodicite = Activity.StringToPeriodicite(BoxPeriodicite.Text);
+                    break; 
                 }
             }
 
+            // supprime les éléments de la listBox 
+            ListActivites.Items.Clear();
+
+            // on remet la listActivites a jour 
+            foreach (Activity a in listAct)
+            {
+                ListActivites.Items.Add(a.Intitule);
+            }
+
+            // remet le tableau a jour 
+            TabActivites.DataContext = null;
+            TabActivites.DataContext = listAct; 
         }
 
         private void Annulation_Click(object sender, RoutedEventArgs e) // clic bouton Annuler 
