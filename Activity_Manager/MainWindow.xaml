@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Activity_Manager"
         mc:Ignorable="d"
-        Title="Activity Manager" Height="600" Width="1150">
+        Title="Activity Manager" Height="600" Width="1200">
 
     <DockPanel x:Name="PanelDepart" Background="#FFBEBEBE">
         <Menu x:Name="Menu" DockPanel.Dock="Top">
@@ -30,8 +30,8 @@
         
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition MinWidth="400"/>
+                <ColumnDefinition MinWidth="400"/> 
             </Grid.ColumnDefinitions>
             
             <Grid.RowDefinitions>
@@ -39,7 +39,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Grid x:Name="GridGauche" Grid.Column="0" Grid.Row="0" Background="#BF967878" Grid.RowSpan="2">
+            <Grid x:Name="GridGauche" Grid.Column="0" Grid.Row="0" Background="#BF967878" Grid.RowSpan="2" MinWidth="400">
                 <Label x:Name="LabelActivite" Content="Créer une activité" FontSize="20" VerticalAlignment="Top" Height="40"/>
                 <Label x:Name="Intitule" Content="Intitulé" VerticalAlignment="Top" Height="30" Margin="0,40,0,0"/>
                 <TextBox x:Name="TextIntitule" VerticalAlignment="Top" Height="25" Margin="0,70,0,0"/>
@@ -63,25 +63,31 @@
                 <Button x:Name="Annulation" Content="Annuler" FontSize="25" Height="35" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,420,0,0" Click="Annulation_Click"/>
             </Grid>
 
-            <!--<Grid x:Name="GridSplitter" Grid.RowSpan="2" >
-                <GridSplitter x:Name="GridSplitterCentre" Width="5"/>
-            </Grid>-->
+            <GridSplitter x:Name="GridSplitterCentre" Width="5" Grid.RowSpan="2"/> 
 
-            <Grid x:Name="GridDroite" Grid.Column="1" Grid.Row="0" Background="#A5967878" VerticalAlignment="Top">
+            <Grid x:Name="GridDroite" Grid.Column="1" Grid.Row="0" Background="#A5967878" VerticalAlignment="Top" MinWidth="400">
                 <ListBox x:Name="ListActivites" Background="#A5967878" MouseDoubleClick="ListActivites_MouseDoubleClick"/>
             </Grid>
 
-            <DataGrid x:Name="TabActivites" Grid.Column="1" Grid.Row="1" Background="#A5967878" ItemsSource="{Binding}" IsReadOnly="True" MinWidth="50">
-                <!--<DataGrid.Columns>
-                    <DataGridTextColumn Width="75" Header="Intitulé" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
-                    <DataGridTextColumn Width="75" Header="Description" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
-                    <DataGridTextColumn Width="75" Header="Lieu" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
-                    <DataGridTextColumn Width="75" Header="Date Début" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
-                    <DataGridTextColumn Width="75" Header="Date Fin" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
-                    <DataGridTextColumn Width="75" Header="Occurences" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
-                    <DataGridTextColumn Width="75" Header="Périodicité" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
-                </DataGrid.Columns>     (Géré dans le .cs dans main)-->
-            </DataGrid>
+            <Grid x:Name="GridDroiteBas" Grid.Column="1" Grid.Row="1" Background="#A5967878">
+                <Label x:Name="RechercheLieu" Content="Rechercher par lieu:" FontSize="12"/>
+                <TextBox x:Name="RechercheLieuText" Height="20" Width="100" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="110,5,0,0"/>
+                <Label x:Name="RechercheDateDeb" Content="Date Début" FontSize="12" Margin="210,0,0,0"/>
+                <DatePicker x:Name="RechercheDateDebText" Height="25" Width="125" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="280,5,0,0"/>
+                <Label x:Name="RechercheDateFin" Content="Date Début" FontSize="12" Margin="400,0,0,0"/>
+                <DatePicker x:Name="RechercheDateFinText" Height="25" Width="125" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="470,5,0,0"/>
+                <DataGrid x:Name="TabActivites" Background="#A5967878" ItemsSource="{Binding}" IsReadOnly="True" MinWidth="50" Margin="0,35,0,0"> 
+                    <!--<DataGrid.Columns>
+                        <DataGridTextColumn Width="75" Header="Intitulé" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="75" Header="Description" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="75" Header="Lieu" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="75" Header="Date Début" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="75" Header="Date Fin" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="75" Header="Occurences" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="75" Header="Périodicité" MinWidth="50" CanUserReorder="False" IsReadOnly="True"/>
+                    </DataGrid.Columns>     (Géré dans le .cs dans main)-->
+                </DataGrid>
+            </Grid> 
         </Grid>
     </DockPanel>
 </Window>

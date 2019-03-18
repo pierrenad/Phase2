@@ -76,7 +76,7 @@ namespace Activity_Manager
                 MessageBox.Show("Veuillez remplir les champs pour créer une activité","Erreur",MessageBoxButton.OK, MessageBoxImage.Error); 
         }
 
-        private void Supprimer_Click(object sender, RoutedEventArgs e)
+        private void Supprimer_Click(object sender, RoutedEventArgs e) // clic sur supprimer une activité 
         {
             RecupInfoListAct(listAct);  // récupérer les infos de l'activité choisie 
 
@@ -102,23 +102,34 @@ namespace Activity_Manager
             ViderChamps();  // on vide les champs de l'activité 
         }
 
-        private void Modifier_Click(object sender, RoutedEventArgs e)
+        private void Modifier_Click(object sender, RoutedEventArgs e) // clic sur modifier une activité 
         {
-            // cherche l'activité dans la liste pour la modifier mais modifie pas 
-            foreach (Activity a in listAct)
+            if (TextIntitule.Text != "" && TextDescription.Text != "" && TextLieu.Text != "" && TextDateDebut.Text != "" && TextDateFin.Text != "" && TextOccurences.Text != "" && BoxPeriodicite.Text != "")
             {
-                if (ListActivites.SelectedItem.Equals(a.Intitule))
+                if (Convert.ToDateTime(TextDateDebut.Text) < Convert.ToDateTime(TextDateFin.Text))
                 {
-                    a.Intitule = TextIntitule.Text;
-                    a.Description = TextDescription.Text; 
-                    a.Lieu = TextLieu.Text;
-                    a.DateHeureDebut = Convert.ToDateTime(TextDateDebut.Text);
-                    a.DateHeureFin = Convert.ToDateTime(TextDateFin.Text);
-                    a.Occurences = Convert.ToInt32(TextOccurences.Text);
-                    a.Periodicite = Activity.StringToPeriodicite(BoxPeriodicite.Text);
-                    break; 
+                    // cherche l'activité dans la liste pour la modifier mais modifie pas 
+                    foreach (Activity a in listAct)
+                    {
+                        if (ListActivites.SelectedItem.Equals(a.Intitule))
+                        {
+                            a.Intitule = TextIntitule.Text;
+                            a.Description = TextDescription.Text;
+                            a.Lieu = TextLieu.Text;
+                            a.DateHeureDebut = Convert.ToDateTime(TextDateDebut.Text);
+                            a.DateHeureFin = Convert.ToDateTime(TextDateFin.Text);
+                            a.Occurences = Convert.ToInt32(TextOccurences.Text);
+                            a.Periodicite = Activity.StringToPeriodicite(BoxPeriodicite.Text);
+                            break;
+                        }
+                    }
                 }
+                else
+                    MessageBox.Show("Incohérence entre la date de début et la date de fin", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            else
+                MessageBox.Show("Veuillez remplir les champs pour créer une activité", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+
 
             // supprime les éléments de la listBox 
             ListActivites.Items.Clear();
@@ -133,17 +144,17 @@ namespace Activity_Manager
             TabActivites.DataContext = null;
             TabActivites.DataContext = listAct; 
         }
-
-        private void Annulation_Click(object sender, RoutedEventArgs e) // clic bouton Annuler 
-        {
-            ViderChamps(); 
-        }
         #endregion
 
         #region AUTRES_METHODES
         private void ListActivites_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             RecupInfoListAct(listAct); 
+        }
+
+        private void Annulation_Click(object sender, RoutedEventArgs e) // clic bouton Annuler 
+        {
+            ViderChamps();
         }
 
         public void ViderChamps()   // nettoyer les champs des entrées 
@@ -157,7 +168,7 @@ namespace Activity_Manager
             BoxPeriodicite.Text = "";
         }
 
-        public void RecupInfoListAct(ObservableCollection<Activity> liste) 
+        public void RecupInfoListAct(ObservableCollection<Activity> liste) // récupère infos d'une activité et les affiches dans les champs 
         {
             foreach (Activity a in liste) 
             {
