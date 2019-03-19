@@ -32,9 +32,19 @@ namespace Activity_Manager
         }
 
         #region MENU 
-        private void About_Click(object sender, RoutedEventArgs e)   // clic sur about dans file 
+        private void MenuOption_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Fait par Pierre Nadin \nCopyright HEPL \nQ2 2018-2019", "About", MessageBoxButton.OK, MessageBoxImage.Information); 
+            
+        }
+
+        private void MenuAbout_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Fait par Pierre Nadin \nCopyright HEPL \nQ2 2018-2019", "About", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void MenuExit_Click(object sender, RoutedEventArgs e)
+        {
+            Close(); 
         }
         #endregion
 
@@ -43,7 +53,7 @@ namespace Activity_Manager
         {
             if (TextIntitule.Text != "" && TextDescription.Text != "" && TextLieu.Text != "" && TextDateDebut.Text != "" && TextDateFin.Text != "" && TextOccurences.Text != "" && BoxPeriodicite.Text != "")
             {
-                if (Convert.ToDateTime(TextDateDebut.Text) < Convert.ToDateTime(TextDateFin.Text))
+                if (Convert.ToDateTime(TextDateDebut.Text) <= Convert.ToDateTime(TextDateFin.Text))
                 {
                     // supprime les éléments de la listBox 
                     foreach (Activity a in listAct)
@@ -52,13 +62,23 @@ namespace Activity_Manager
                     }
 
                     // ajout dans la liste d'une nouvelle activité 
-                    listAct.Add(new Activity
+                    try
                     {
-                        Intitule = TextIntitule.Text, Description = TextDescription.Text,
-                        Lieu = TextLieu.Text, DateHeureDebut = Convert.ToDateTime(TextDateDebut.Text),
-                        DateHeureFin = Convert.ToDateTime(TextDateFin.Text), Occurences = Convert.ToInt32(TextOccurences.Text),
-                        Periodicite = Activity.StringToPeriodicite(BoxPeriodicite.Text)
-                    });   
+                        listAct.Add(new Activity
+                        {
+                            Intitule = TextIntitule.Text,
+                            Description = TextDescription.Text,
+                            Lieu = TextLieu.Text,
+                            DateHeureDebut = Convert.ToDateTime(TextDateDebut.Text),
+                            DateHeureFin = Convert.ToDateTime(TextDateFin.Text),
+                            Occurences = Convert.ToInt32(TextOccurences.Text),
+                            Periodicite = Activity.StringToPeriodicite(BoxPeriodicite.Text)
+                        });
+                    }
+                    catch (FormatException)
+                    {
+                        MessageBox.Show("Pas bonne occurence !", "erreur", MessageBoxButton.OK, MessageBoxImage.Error); 
+                    }
 
                     // on ajoute le nom de l'activité dans la liste des activités (listbox) 
                     foreach (Activity a in listAct)
