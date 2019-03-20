@@ -13,7 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ClassActivity; 
+using ClassActivity;
+using CsvHelper; // chercher sur internet 
 
 
 namespace Activity_Manager 
@@ -23,6 +24,8 @@ namespace Activity_Manager
     /// </summary>
     public partial class MainWindow : Window
     {
+        public string nomFichier = "Document";
+        private static CsvHelper.Configuration.Configuration csvConf = new CsvHelper.Configuration.Configuration { Delimiter = ";" }; 
         ObservableCollection<Activity> listAct = new ObservableCollection<Activity>(); // création d'une liste d'activités avec laquelle travailler 
 
         public MainWindow()
@@ -32,6 +35,7 @@ namespace Activity_Manager
         }
 
         #region MENU 
+        #region TOOLS 
         private void MenuOption_Click(object sender, RoutedEventArgs e)
         {
             
@@ -41,11 +45,57 @@ namespace Activity_Manager
         {
             MessageBox.Show("Fait par Pierre Nadin \nCopyright HEPL \nQ2 2018-2019", "About", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+        #endregion
+
+        #region FILE 
+        private void MenuOpen_Click(object sender, RoutedEventArgs e)
+        {
+        #region OpenFileDialog
+
+#pragma warning disable CS0164 // Cette étiquette n'est pas référencée
+        https://docs.microsoft.com/fr-fr/dotnet/api/microsoft.win32.openfiledialog?redirectedfrom=MSDN&view=netframework-4.7.2
+#pragma warning restore CS0164 // Cette étiquette n'est pas référencée
+
+            // Configure open file dialog box
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.FileName = "Document"; // Default file name
+            dlg.DefaultExt = ".xml"; // Default file extension
+            dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+            dlg.InitialDirectory = nomFichier;
+
+            // Show open file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                // Open document
+                string filename = dlg.FileName;
+                LoadFromXMLFormat(filename);
+            }
+            #endregion 
+        }
+
+        private void MenuSave_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MenuImport_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MenuExport_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
 
         private void MenuExit_Click(object sender, RoutedEventArgs e)
         {
             Close(); 
         }
+        #endregion 
         #endregion
 
         #region TOOLBAR 
@@ -161,10 +211,98 @@ namespace Activity_Manager
             }
 
             // remet le tableau a jour 
-            TabActivites.DataContext = null;
-            TabActivites.DataContext = listAct; 
+            TabActivites.ItemsSource = listAct;
+            TabActivites.Items.Refresh();  
         }
         #endregion
+
+        #region RECHERCHES 
+        private void ValideRecherche_Click(object sender, RoutedEventArgs e)
+        {
+            if(RechercheLieuText.Text == "" && RechercheDateDebText.Text == "" && RechercheDateFinText.Text == "")
+            {
+                TabActivites.ItemsSource = listAct;
+                TabActivites.Items.Refresh();
+            }
+            // recherche lieu 
+            if (RechercheLieuText.Text != "")
+            {
+                
+                string lieu = RechercheLieuText.Text;
+
+                List<Activity> ListLieu = new List<Activity>();
+
+                foreach (Activity a in listAct)
+                {
+                    if (a.Lieu.Contains(lieu))
+                    {
+                        ListLieu.Add(a);
+                    }
+                }
+
+                ListLieu.Sort();
+                TabActivites.ItemsSource = ListLieu;
+                TabActivites.Items.Refresh();
+            }
+            //else
+            //{
+            //    TabActivites.ItemsSource = listAct;
+            //    TabActivites.Items.Refresh();
+            //}
+
+            // recherche date 
+            if (RechercheDateDebText.Text != "" || RechercheDateFinText.Text != "")
+            {                
+                List<Activity> ListDate = new List<Activity>();
+                DateTime Ddeb, Dfin;
+
+                if (RechercheDateDebText.Text != "" && RechercheDateFinText.Text == "")
+                {
+                    Ddeb = Convert.ToDateTime(RechercheDateDebText.Text);
+                    foreach (Activity a in listAct)
+                    {
+                        if (Ddeb <= Convert.ToDateTime(a.DateHeureDebut))
+                        {
+                            ListDate.Add(a);
+                        }
+                    }
+                }
+                if (RechercheDateDebText.Text == "" && RechercheDateFinText.Text != "")
+                {
+                    Dfin = Convert.ToDateTime(RechercheDateFinText.Text);
+                    foreach (Activity a in listAct)
+                    {
+                        if (Dfin >= Convert.ToDateTime(a.DateHeureFin))
+                        {
+                            ListDate.Add(a);
+                        }
+                    }
+                }
+                if (RechercheDateDebText.Text != "" && RechercheDateFinText.Text != "")
+                {
+                    Ddeb = Convert.ToDateTime(RechercheDateDebText.Text);
+                    Dfin = Convert.ToDateTime(RechercheDateFinText.Text);
+
+                    foreach (Activity a in listAct)
+                    {
+                        if (Ddeb <= Convert.ToDateTime(a.DateHeureDebut) && Dfin >= Convert.ToDateTime(a.DateHeureFin))
+                        {
+                            ListDate.Add(a);
+                        }
+                    }
+                }
+
+                ListDate.Sort();
+                TabActivites.ItemsSource = ListDate;
+                TabActivites.Items.Refresh();
+            }
+            //else
+            //{
+            //    TabActivites.ItemsSource = listAct;
+            //    TabActivites.Items.Refresh();
+            //}
+        }        
+        #endregion 
 
         #region AUTRES_METHODES
         private void ListActivites_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -204,7 +342,10 @@ namespace Activity_Manager
                 }
             }
         }
+
+
         #endregion
 
+        
     }
 }

@@ -10,10 +10,10 @@
     <DockPanel x:Name="PanelDepart" Background="#FFBEBEBE">
         <Menu x:Name="Menu" DockPanel.Dock="Top">
             <MenuItem Header="File">
-                <MenuItem x:Name="MenuOpen" Header="Open"/>
-                <MenuItem x:Name="MenuSave" Header="Save"/>
-                <MenuItem x:Name="MenuImport" Header="Import"/>
-                <MenuItem x:Name="MenuExport" Header="Export"/>
+                <MenuItem x:Name="MenuOpen" Header="Open" Click="MenuOpen_Click"/>
+                <MenuItem x:Name="MenuSave" Header="Save" Click="MenuSave_Click"/>
+                <MenuItem x:Name="MenuImport" Header="Import" Click="MenuImport_Click"/>
+                <MenuItem x:Name="MenuExport" Header="Export" Click="MenuExport_Click"/>
                 <MenuItem x:Name="MenuExit" Header="Exit" Click="MenuExit_Click"/>
             </MenuItem>
             <MenuItem Header="Tools">
@@ -80,12 +80,13 @@
 
             <Grid x:Name="GridDroiteBas" Grid.Column="1" Grid.Row="1" Background="#A5967878">
                 <Label x:Name="RechercheLieu" Content="Rechercher par lieu:" FontSize="12"/>
-                <TextBox x:Name="RechercheLieuText" Height="20" Width="100" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="110,5,0,0"/>
-                <Label x:Name="RechercheDateDeb" Content="Date Début" FontSize="12" Margin="210,0,0,0"/>
-                <DatePicker x:Name="RechercheDateDebText" Height="25" Width="125" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="280,5,0,0"/>
-                <Label x:Name="RechercheDateFin" Content="Date Début" FontSize="12" Margin="400,0,0,0"/>
-                <DatePicker x:Name="RechercheDateFinText" Height="25" Width="125" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="470,5,0,0"/>
-                <DataGrid x:Name="TabActivites" Background="#A5967878" ItemsSource="{Binding}" IsReadOnly="True" MinWidth="50" Margin="0,35,0,0"/>
+                <TextBox x:Name="RechercheLieuText" Height="20" Width="100" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="115,5,0,0"/>
+                <Label x:Name="RechercheDateDeb" Content="Date Début: " FontSize="12" Margin="215,0,0,0"/>
+                <DatePicker x:Name="RechercheDateDebText" Height="25" Width="125" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="285,5,0,0"/>
+                <Label x:Name="RechercheDateFin" Content="Date Fin:" FontSize="12" Margin="405,0,0,0"/>
+                <DatePicker x:Name="RechercheDateFinText" Height="25" Width="125" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="460,5,0,0"/>
+                <Button x:Name="ValideRecherche" Content="Valider" Height="20" Width="300" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,35,0,0" Click="ValideRecherche_Click"/>
+                <DataGrid x:Name="TabActivites" Background="#A5967878" ItemsSource="{Binding}" IsReadOnly="True" MinWidth="50" Margin="0,60,0,0"/>
             </Grid> 
         </Grid>
     </DockPanel>
