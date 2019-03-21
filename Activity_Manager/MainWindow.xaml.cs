@@ -13,7 +13,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using System.IO; 
 using ClassActivity;
+using System.Xml.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Reflection;
 using CsvHelper; // chercher sur internet 
 
 
@@ -24,7 +29,7 @@ namespace Activity_Manager
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string nomFichier = "Document";
+        public string nomFichier = "FichierPhase2";
         private static CsvHelper.Configuration.Configuration csvConf = new CsvHelper.Configuration.Configuration { Delimiter = ";" }; 
         ObservableCollection<Activity> listAct = new ObservableCollection<Activity>(); // création d'une liste d'activités avec laquelle travailler 
 
@@ -50,7 +55,7 @@ namespace Activity_Manager
         #region FILE 
         private void MenuOpen_Click(object sender, RoutedEventArgs e)
         {
-        #region OpenFileDialog
+            #region OpenFileDialog
 
 #pragma warning disable CS0164 // Cette étiquette n'est pas référencée
         https://docs.microsoft.com/fr-fr/dotnet/api/microsoft.win32.openfiledialog?redirectedfrom=MSDN&view=netframework-4.7.2
@@ -58,7 +63,7 @@ namespace Activity_Manager
 
             // Configure open file dialog box
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.FileName = "Document"; // Default file name
+            dlg.FileName = "FichierPhase2"; // Default file name
             dlg.DefaultExt = ".xml"; // Default file extension
             dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
             dlg.InitialDirectory = nomFichier;
@@ -78,17 +83,136 @@ namespace Activity_Manager
 
         private void MenuSave_Click(object sender, RoutedEventArgs e)
         {
+            #region Application.Current.Shutdown();
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = "FichierPhase2"; // Default file name
+            dlg.DefaultExt = ".xml"; // Default file extension
+            dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+            dlg.InitialDirectory = nomFichier;
 
+            // Show save file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                // Save document
+                string filename = dlg.FileName;
+                List<Activity> tmp = new List<Activity>();
+                //tmp = listAct;
+                foreach (Activity a in listAct)
+                {
+                    tmp.Add(a); 
+                }
+                SaveAsXMLFormat(tmp, filename);
+            }
+            #endregion
         }
 
         private void MenuImport_Click(object sender, RoutedEventArgs e)
         {
+            #region OpenFileDialog
 
+#pragma warning disable CS0164 // Cette étiquette n'est pas référencée
+        https://docs.microsoft.com/fr-fr/dotnet/api/microsoft.win32.openfiledialog?redirectedfrom=MSDN&view=netframework-4.7.2
+#pragma warning restore CS0164 // Cette étiquette n'est pas référencée
+
+            // Configure open file dialog box
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.FileName = "Document"; // Default file name
+            dlg.DefaultExt = ".csv"; // Default file extension
+            dlg.Filter = "Text documents (.csv)|*.csv"; // Filter files by extension
+            dlg.InitialDirectory = nomFichier;
+
+            // Show open file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                // Open document
+                List<Activity> tmp = new List<Activity>();
+
+                string filename = dlg.FileName;
+                tmp = ReadFile<Activity>(filename);
+
+                //listAct = tmp;
+                foreach (Activity a in tmp) 
+                {
+                    listAct.Add(a); 
+                }
+
+                ListActivites.Items.Clear();
+                TabActivites.ItemsSource = null;
+                TabActivites.Items.Refresh();
+
+                foreach (Activity a in listAct) ListActivites.Items.Add(a.Intitule);
+
+                TabActivites.ItemsSource = listAct;
+                TabActivites.Items.Refresh();
+            }
+            #endregion 
+        }
+        public List<T> ReadFile<T>(string filename) where T : class
+        {
+            List<T> tmp = new List<T>();
+            using (TextReader tr = new StreamReader(filename, Encoding.GetEncoding(1252)))
+            {
+                var csv = new CsvReader(tr, csvConf);
+                tmp = csv.GetRecords<T>().ToList();
+            }
+            return tmp;
         }
 
         private void MenuExport_Click(object sender, RoutedEventArgs e)
         {
+            #region Application.Current.Shutdown();
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = "FichierPhase2"; // Default file name
+            dlg.DefaultExt = ".csv"; // Default file extension
+            dlg.Filter = "Text documents (.csv)|*.csv"; // Filter files by extension
+            dlg.InitialDirectory = nomFichier;
 
+            // Show save file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                // Save document
+                string filename = dlg.FileName;
+                List<Activity> tmp = new List<Activity>();
+                //tmp = listAct;
+                foreach(Activity a in listAct)
+                {
+                    tmp.Add(a); 
+                }
+
+                //Information.Text = filename;
+                bool Erreur = WriteFile<Activity>(tmp, filename);
+
+            }
+            #endregion
+        }
+        public bool WriteFile<T>(List<T> tmp, string filename) where T : class
+        {
+            try
+            {
+                using (TextWriter tr = new StreamWriter(filename, true, Encoding.GetEncoding(1252)))
+                {
+                    var csv = new CsvWriter(tr, csvConf);
+                    csv.WriteRecords(tmp);
+                    //Information.Text = "Je suis la ";
+
+                }
+                return false;
+            }
+            catch
+            {
+                //Information.Text = "Catch";
+
+                return true;
+            }
         }
 
         private void MenuExit_Click(object sender, RoutedEventArgs e)
@@ -346,6 +470,37 @@ namespace Activity_Manager
 
         #endregion
 
-        
+        #region XML CSV
+        private static void SaveAsXMLFormat(List<Activity> tmp, string filename)
+        {
+            XmlSerializer xmlFormat = new XmlSerializer(typeof(List<Activity>));
+            using (Stream fStream = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                xmlFormat.Serialize(fStream, tmp);
+            }
+        }
+        private void LoadFromXMLFormat(string filename)
+        {
+            XmlSerializer xmlFormat = new XmlSerializer(typeof(List<Activity>));
+            using (Stream fStream = File.OpenRead(filename))
+            {
+                List<Activity> tmp = (List<Activity>)xmlFormat.Deserialize(fStream);
+                //listAct = tmp; 
+                foreach(Activity a in tmp)
+                {
+                    listAct.Add(a); 
+                }
+
+                ListActivites.Items.Clear();
+                TabActivites.ItemsSource = null;
+                TabActivites.Items.Refresh();
+
+                foreach (Activity a in listAct) ListActivites.Items.Add(a.Intitule);
+
+                TabActivites.ItemsSource = listAct;
+                TabActivites.Items.Refresh();
+            }
+        }
+        #endregion
     }
 }

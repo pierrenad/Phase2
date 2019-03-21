@@ -5,8 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Activity_Manager"
         mc:Ignorable="d"
-        Title="Option" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="Option" Height="300" Width="450" Background="#BF967878">
+    <Grid x:Name="Grid">
+        <StackPanel x:Name="stackGauche" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="250">
+            <Label x:Name="OptionLabel" Content="Option" FontSize="40"/>
+            <Label x:Name="DossierLabel" Content="Dossier de travail" FontSize="25"/>
+            <Label x:Name="CouleurFondLabel" Content="Couleur de fond" FontSize="25"/>
+            <Label x:Name="CouleurPoliceLabel" Content="Couleur de la police" FontSize="25"/> 
+        </StackPanel>
+
+        <StackPanel x:Name="satckDroite" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="225">
+            <Button x:Name="DossierChoix" Content="Choisir" Height="30" Width="150" Margin="0,70,0,0"/>
+            <Button x:Name="CouleurFondChoix" Content="Choisir" Height="30" Width="150" Margin="0,15,0,0"/>
+            <Button x:Name="CouleurPoiceChoix" Content="Choisir" Height="30" Width="150" Margin="0,15,0,0"/>
+        </StackPanel>
+    </Grid> 
 </Window>
