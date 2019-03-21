@@ -19,7 +19,8 @@ using ClassActivity;
 using System.Xml.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Reflection;
-using CsvHelper; // chercher sur internet 
+using CsvHelper;
+using static Activity_Manager.Option1; 
 
 
 namespace Activity_Manager 
@@ -43,7 +44,15 @@ namespace Activity_Manager
         #region TOOLS 
         private void MenuOption_Click(object sender, RoutedEventArgs e)
         {
-            
+            Option1 o1 = new Option1(this);
+            o1.EventCouleurFond += o1_EventCouleurFond; 
+            o1.Show();
+        }
+        private void o1_EventCouleurFond(string DossierDeTravail, SolidColorBrush CouleurFond, SolidColorBrush CouleurPolice) 
+        {
+            ListActivites.Background = CouleurFond;
+            ListActivites.Foreground = CouleurPolice; 
+            nomFichier = DossierDeTravail;
         }
 
         private void MenuAbout_Click(object sender, RoutedEventArgs e)
@@ -452,18 +461,25 @@ namespace Activity_Manager
 
         public void RecupInfoListAct(ObservableCollection<Activity> liste) // récupère infos d'une activité et les affiches dans les champs 
         {
-            foreach (Activity a in liste) 
+            try
             {
-                if (ListActivites.SelectedItem.Equals(a.Intitule))
+                foreach (Activity a in liste)
                 {
-                    TextIntitule.Text = a.Intitule;
-                    TextDescription.Text = a.Description;
-                    TextLieu.Text = a.Lieu;
-                    TextDateDebut.Text = Convert.ToString(a.DateHeureDebut);
-                    TextDateFin.Text = Convert.ToString(a.DateHeureFin);
-                    TextOccurences.Text = Convert.ToString(a.Occurences);
-                    BoxPeriodicite.Text = a.Periodicite.ToString();
+                    if (ListActivites.SelectedItem.Equals(a.Intitule))
+                    {
+                        TextIntitule.Text = a.Intitule;
+                        TextDescription.Text = a.Description;
+                        TextLieu.Text = a.Lieu;
+                        TextDateDebut.Text = Convert.ToString(a.DateHeureDebut);
+                        TextDateFin.Text = Convert.ToString(a.DateHeureFin);
+                        TextOccurences.Text = Convert.ToString(a.Occurences);
+                        BoxPeriodicite.Text = a.Periodicite.ToString();
+                    }
                 }
+            }
+            catch(System.NullReferenceException)
+            {
+
             }
         }
 
