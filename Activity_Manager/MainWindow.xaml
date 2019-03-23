@@ -69,7 +69,8 @@
                     <ComboBoxItem Content="mensuelle"/>
                     <ComboBoxItem Content="annuelle"/>
                 </ComboBox>
-                <Button x:Name="Annulation" Content="Annuler" FontSize="25" Height="35" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,420,0,0" Click="Annulation_Click"/>
+                <Button x:Name="Annulation" Content="Annuler" FontSize="25" Height="35" Width="150" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,420,200,0" Click="Annulation_Click"/>
+                <Button x:Name="ViderTout" Content="Reinitialiser" FontSize="25" Height="35" Width="150" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="200,420,0,0" Click="ViderTout_Click"/>
             </Grid>
 
             <GridSplitter x:Name="GridSplitterCentre" Width="5" Grid.RowSpan="2"/> 

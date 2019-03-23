@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ArrayOfActivity xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Activity>
+    <Intitule>test1</Intitule>
+    <Description>test1</Description>
+    <Lieu>testland1</Lieu>
+    <DateHeureDebut>2019-03-01T00:00:00</DateHeureDebut>
+    <DateHeureFin>2019-03-02T00:00:00</DateHeureFin>
+    <Occurences>0</Occurences>
+    <Periodicite>hebdomadaire</Periodicite>
+  </Activity>
+  <Activity>
+    <Intitule>test2</Intitule>
+    <Description>test2</Description>
+    <Lieu>testland2</Lieu>
+    <DateHeureDebut>2019-03-03T00:00:00</DateHeureDebut>
+    <DateHeureFin>2019-03-04T00:00:00</DateHeureFin>
+    <Occurences>1</Occurences>
+    <Periodicite>mensuelle</Periodicite>
+  </Activity>
+</ArrayOfActivity>

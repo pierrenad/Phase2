@@ -72,10 +72,17 @@ namespace Activity_Manager
 
             // Configure open file dialog box
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.FileName = "FichierPhase2"; // Default file name
-            dlg.DefaultExt = ".xml"; // Default file extension
-            dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+            dlg.FileName = "Activity";                  // nom par défaut  
+            dlg.DefaultExt = ".xml";                    // extension par défaut 
+            dlg.Filter = "Text documents (.xml)|*.xml"; // extensions pour filtre (celles à afficher) 
             dlg.InitialDirectory = nomFichier;
+
+            //// supprimer les activités de la listAct 
+            //foreach (Activity a in listAct)
+            //{
+            //    listAct.Remove(a);
+            //}
+            listAct.Clear(); 
 
             // Show open file dialog box
             Nullable<bool> result = dlg.ShowDialog();
@@ -85,7 +92,7 @@ namespace Activity_Manager
             {
                 // Open document
                 string filename = dlg.FileName;
-                LoadFromXMLFormat(filename);
+                LoadFromXMLFormat(filename);    // on load le document 
             }
             #endregion 
         }
@@ -94,12 +101,12 @@ namespace Activity_Manager
         {
             #region Application.Current.Shutdown();
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.FileName = "FichierPhase2"; // Default file name
-            dlg.DefaultExt = ".xml"; // Default file extension
-            dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+            dlg.FileName = "Activity";                  // nom par défaut  
+            dlg.DefaultExt = ".xml";                    // extension par défaut 
+            dlg.Filter = "Text documents (.xml)|*.xml"; // extensions pour filtre (celles à afficher) 
             dlg.InitialDirectory = nomFichier;
 
-            // Show save file dialog box
+            // Show save file dialog box 
             Nullable<bool> result = dlg.ShowDialog();
 
             // Process save file dialog box results
@@ -107,13 +114,14 @@ namespace Activity_Manager
             {
                 // Save document
                 string filename = dlg.FileName;
-                List<Activity> tmp = new List<Activity>();
-                //tmp = listAct;
+                List<Activity> tmp = new List<Activity>();  // creation d'une liste car on sait pas travailler avec ObservableCollection 
+
+                // on copie notre liste (ObservableCollection) dans la liste (List) 
                 foreach (Activity a in listAct)
                 {
                     tmp.Add(a); 
                 }
-                SaveAsXMLFormat(tmp, filename);
+                SaveAsXMLFormat(tmp, filename); // on save en .xml 
             }
             #endregion
         }
@@ -128,10 +136,17 @@ namespace Activity_Manager
 
             // Configure open file dialog box
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.FileName = "Document"; // Default file name
-            dlg.DefaultExt = ".csv"; // Default file extension
-            dlg.Filter = "Text documents (.csv)|*.csv"; // Filter files by extension
+            dlg.FileName = "Document";                  // nom par défaut  
+            dlg.DefaultExt = ".csv";                    // extension par défaut 
+            dlg.Filter = "Text documents (.csv)|*.csv"; // extensions pour filtre (celles à afficher) 
             dlg.InitialDirectory = nomFichier;
+
+            //// supprimer les activités de la listAct 
+            //foreach (Activity a in listAct)
+            //{
+            //    listAct.Remove(a);
+            //} 
+            listAct.Clear(); 
 
             // Show open file dialog box
             Nullable<bool> result = dlg.ShowDialog();
@@ -140,17 +155,19 @@ namespace Activity_Manager
             if (result == true)
             {
                 // Open document
+                // on cree une list comme pour le save car on peut pas travailler avec ObservableCollection 
                 List<Activity> tmp = new List<Activity>();
 
                 string filename = dlg.FileName;
-                tmp = ReadFile<Activity>(filename);
+                tmp = ReadFile<Activity>(filename); // on récupère les activités dans le fichier 
 
-                //listAct = tmp;
+                // on copier la liste récupérée dans notre ObservableCollection 
                 foreach (Activity a in tmp) 
                 {
                     listAct.Add(a); 
                 }
 
+                // on refresh la liste d'activités et datagrid (sinon peut garder anciens éléments) 
                 ListActivites.Items.Clear();
                 TabActivites.ItemsSource = null;
                 TabActivites.Items.Refresh();
@@ -162,24 +179,32 @@ namespace Activity_Manager
             }
             #endregion 
         }
-        public List<T> ReadFile<T>(string filename) where T : class
+        public List<T> ReadFile<T>(string filename) where T : class // T est ici une classe, Activity en l'occurence  
         {
-            List<T> tmp = new List<T>();
-            using (TextReader tr = new StreamReader(filename, Encoding.GetEncoding(1252)))
+            try
             {
-                var csv = new CsvReader(tr, csvConf);
-                tmp = csv.GetRecords<T>().ToList();
+                List<T> tmp = new List<T>();
+                using (TextReader tr = new StreamReader(filename, Encoding.GetEncoding(1252)))
+                {
+                    var csv = new CsvReader(tr, csvConf);
+                    tmp = csv.GetRecords<T>().ToList();
+                }
+                return tmp;
             }
-            return tmp;
+            catch
+            {
+                List<T> tmp = new List<T>();
+                return tmp; 
+            } 
         }
 
         private void MenuExport_Click(object sender, RoutedEventArgs e)
         {
             #region Application.Current.Shutdown();
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.FileName = "FichierPhase2"; // Default file name
-            dlg.DefaultExt = ".csv"; // Default file extension
-            dlg.Filter = "Text documents (.csv)|*.csv"; // Filter files by extension
+            dlg.FileName = "Document";                  // nom par défaut  
+            dlg.DefaultExt = ".csv";                    // extension par défaut 
+            dlg.Filter = "Text documents (.csv)|*.csv"; // extensions pour filtre (celles à afficher) 
             dlg.InitialDirectory = nomFichier;
 
             // Show save file dialog box
@@ -191,19 +216,19 @@ namespace Activity_Manager
                 // Save document
                 string filename = dlg.FileName;
                 List<Activity> tmp = new List<Activity>();
-                //tmp = listAct;
+
+                // on copie notre liste (ObservableCollection) dans la liste tmp (List) car on travaille avec List 
                 foreach(Activity a in listAct)
                 {
                     tmp.Add(a); 
                 }
-
-                //Information.Text = filename;
+                
                 bool Erreur = WriteFile<Activity>(tmp, filename);
 
             }
             #endregion
         }
-        public bool WriteFile<T>(List<T> tmp, string filename) where T : class
+        public bool WriteFile<T>(List<T> tmp, string filename) where T : class // T est ici une classe, Activity en l'occurence  
         {
             try
             {
@@ -211,15 +236,11 @@ namespace Activity_Manager
                 {
                     var csv = new CsvWriter(tr, csvConf);
                     csv.WriteRecords(tmp);
-                    //Information.Text = "Je suis la ";
-
                 }
                 return false;
             }
             catch
             {
-                //Information.Text = "Catch";
-
                 return true;
             }
         }
@@ -282,16 +303,19 @@ namespace Activity_Manager
         private void Supprimer_Click(object sender, RoutedEventArgs e) // clic sur supprimer une activité 
         {
             RecupInfoListAct(listAct);  // récupérer les infos de l'activité choisie 
-
-            // supprimer l'acticité de la listAct
-            foreach (Activity a in listAct)
+            try
             {
-                if (ListActivites.SelectedItem.Equals(a.Intitule))
+                // supprimer l'acticité de la listAct
+                foreach (Activity a in listAct)
                 {
-                    listAct.Remove(a);
-                    break; 
+                    if (ListActivites.SelectedItem.Equals(a.Intitule))
+                    {
+                        listAct.Remove(a);
+                        break;
+                    }
                 }
             }
+            catch (System.NullReferenceException) { }
 
             // supprime les éléments de la listBox 
             ListActivites.Items.Clear(); 
@@ -448,6 +472,13 @@ namespace Activity_Manager
             ViderChamps();
         }
 
+        private void ViderTout_Click(object sender, RoutedEventArgs e)
+        {
+            listAct.Clear();
+            ViderChamps();
+            ListActivites.Items.Clear(); 
+        }
+
         public void ViderChamps()   // nettoyer les champs des entrées 
         {
             TextIntitule.Text = "";
@@ -482,15 +513,13 @@ namespace Activity_Manager
 
             }
         }
-
-
         #endregion
 
         #region XML CSV
         private static void SaveAsXMLFormat(List<Activity> tmp, string filename)
         {
             XmlSerializer xmlFormat = new XmlSerializer(typeof(List<Activity>));
-            using (Stream fStream = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (Stream fStream = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None)) // nom, mode creation, permissions, permissions de partage
             {
                 xmlFormat.Serialize(fStream, tmp);
             }
@@ -500,23 +529,29 @@ namespace Activity_Manager
             XmlSerializer xmlFormat = new XmlSerializer(typeof(List<Activity>));
             using (Stream fStream = File.OpenRead(filename))
             {
-                List<Activity> tmp = (List<Activity>)xmlFormat.Deserialize(fStream);
-                //listAct = tmp; 
+                List<Activity> tmp = (List<Activity>)xmlFormat.Deserialize(fStream);    // récupère info et met dans liste
+                
+                // on copie ce qu'on recupere dans notre liste (ObservableCollection) 
                 foreach(Activity a in tmp)
                 {
                     listAct.Add(a); 
                 }
 
-                ListActivites.Items.Clear();
-                TabActivites.ItemsSource = null;
-                TabActivites.Items.Refresh();
+                ListActivites.Items.Clear();        // vider la liste d'activités 
+                TabActivites.ItemsSource = null;    // vider le datagrid 
+                TabActivites.Items.Refresh(); 
 
-                foreach (Activity a in listAct) ListActivites.Items.Add(a.Intitule);
+                // on ajoute les noms dans la liste d'activités 
+                foreach (Activity a in listAct)
+                {
+                    ListActivites.Items.Add(a.Intitule);
+                } 
 
-                TabActivites.ItemsSource = listAct;
+                TabActivites.ItemsSource = listAct; // ajoute dans datagrid 
                 TabActivites.Items.Refresh();
             }
         }
         #endregion
+        
     }
 }
