@@ -136,7 +136,7 @@ namespace ClassActivity
 
         public int CompareTo(Activity other)
         {
-            return DateHeureDebut.CompareTo(other.DateHeureDebut); 
+            return Intitule.CompareTo(other.Intitule); 
         } 
 
         #endregion

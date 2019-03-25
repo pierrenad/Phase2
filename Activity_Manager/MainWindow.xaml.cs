@@ -77,11 +77,7 @@ namespace Activity_Manager
             dlg.Filter = "Text documents (.xml)|*.xml"; // extensions pour filtre (celles à afficher) 
             dlg.InitialDirectory = nomFichier;
 
-            //// supprimer les activités de la listAct 
-            //foreach (Activity a in listAct)
-            //{
-            //    listAct.Remove(a);
-            //}
+            // supprimer les activités de la listAct 
             listAct.Clear(); 
 
             // Show open file dialog box
@@ -95,6 +91,33 @@ namespace Activity_Manager
                 LoadFromXMLFormat(filename);    // on load le document 
             }
             #endregion 
+        }
+        private void LoadFromXMLFormat(string filename)
+        {
+            XmlSerializer xmlFormat = new XmlSerializer(typeof(List<Activity>));
+            using (Stream fStream = File.OpenRead(filename))
+            {
+                List<Activity> tmp = (List<Activity>)xmlFormat.Deserialize(fStream);    // récupère info et met dans liste
+                tmp.Sort(); // on trie la liste 
+                // on copie ce qu'on recupere dans notre liste (ObservableCollection) 
+                foreach (Activity a in tmp)
+                {
+                    listAct.Add(a);
+                }
+
+                ListActivites.Items.Clear();        // vider la liste d'activités 
+                TabActivites.ItemsSource = null;    // vider le datagrid 
+                TabActivites.Items.Refresh();
+
+                // on ajoute les noms dans la liste d'activités 
+                foreach (Activity a in listAct)
+                {
+                    ListActivites.Items.Add(a.Intitule);
+                }
+
+                TabActivites.ItemsSource = listAct; // ajoute dans datagrid 
+                TabActivites.Items.Refresh();
+            }
         }
 
         private void MenuSave_Click(object sender, RoutedEventArgs e)
@@ -125,6 +148,14 @@ namespace Activity_Manager
             }
             #endregion
         }
+        private static void SaveAsXMLFormat(List<Activity> tmp, string filename)
+        {
+            XmlSerializer xmlFormat = new XmlSerializer(typeof(List<Activity>));
+            using (Stream fStream = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None)) // nom, mode creation, permissions, permissions de partage
+            {
+                xmlFormat.Serialize(fStream, tmp);
+            }
+        }
 
         private void MenuImport_Click(object sender, RoutedEventArgs e)
         {
@@ -142,10 +173,6 @@ namespace Activity_Manager
             dlg.InitialDirectory = nomFichier;
 
             //// supprimer les activités de la listAct 
-            //foreach (Activity a in listAct)
-            //{
-            //    listAct.Remove(a);
-            //} 
             listAct.Clear(); 
 
             // Show open file dialog box
@@ -160,8 +187,8 @@ namespace Activity_Manager
 
                 string filename = dlg.FileName;
                 tmp = ReadFile<Activity>(filename); // on récupère les activités dans le fichier 
-
-                // on copier la liste récupérée dans notre ObservableCollection 
+                tmp.Sort();     // on trie la liste recue 
+                // on copie la liste récupérée dans notre ObservableCollection 
                 foreach (Activity a in tmp) 
                 {
                     listAct.Add(a); 
@@ -172,9 +199,13 @@ namespace Activity_Manager
                 TabActivites.ItemsSource = null;
                 TabActivites.Items.Refresh();
 
-                foreach (Activity a in listAct) ListActivites.Items.Add(a.Intitule);
+                // on ajoute les noms dans la liste d'activités 
+                foreach (Activity a in listAct)
+                {
+                    ListActivites.Items.Add(a.Intitule);
+                }
 
-                TabActivites.ItemsSource = listAct;
+                TabActivites.ItemsSource = listAct; // ajoute dans datagrid 
                 TabActivites.Items.Refresh();
             }
             #endregion 
@@ -259,11 +290,8 @@ namespace Activity_Manager
             {
                 if (Convert.ToDateTime(TextDateDebut.Text) <= Convert.ToDateTime(TextDateFin.Text))
                 {
-                    // supprime les éléments de la listBox 
-                    foreach (Activity a in listAct)
-                    {
-                        ListActivites.Items.Remove(a.Intitule); 
-                    }
+                    // supprime les éléments de la listBox car sinon garde anciens elements 
+                    ListActivites.Items.Clear();
 
                     // ajout dans la liste d'une nouvelle activité 
                     try
@@ -283,6 +311,8 @@ namespace Activity_Manager
                     {
                         MessageBox.Show("Pas bonne occurence !", "erreur", MessageBoxButton.OK, MessageBoxImage.Error); 
                     }
+
+                    Tri_OC(listAct); // on trie la liste (ObservableCollection) 
 
                     // on ajoute le nom de l'activité dans la liste des activités (listbox) 
                     foreach (Activity a in listAct)
@@ -318,7 +348,9 @@ namespace Activity_Manager
             catch (System.NullReferenceException) { }
 
             // supprime les éléments de la listBox 
-            ListActivites.Items.Clear(); 
+            ListActivites.Items.Clear();
+
+            Tri_OC(listAct); // on trie la liste (ObservableCollection) 
 
             // on remet la listActivites a jour 
             foreach (Activity a in listAct)
@@ -331,43 +363,37 @@ namespace Activity_Manager
 
         private void Modifier_Click(object sender, RoutedEventArgs e) // clic sur modifier une activité 
         {
-            //if (TextIntitule.Text != "" && TextDescription.Text != "" && TextLieu.Text != "" && TextDateDebut.Text != "" && TextDateFin.Text != "" && TextOccurences.Text != "" && BoxPeriodicite.Text != "")
-            //{
             try
             {
-                try
+                if (Convert.ToDateTime(TextDateDebut.Text) < Convert.ToDateTime(TextDateFin.Text))
                 {
-                    if (Convert.ToDateTime(TextDateDebut.Text) < Convert.ToDateTime(TextDateFin.Text))
+                    // cherche l'activité dans la liste pour la modifier mais modifie pas 
+                    foreach (Activity a in listAct)
                     {
-                        // cherche l'activité dans la liste pour la modifier mais modifie pas 
-                        foreach (Activity a in listAct)
+                        if (ListActivites.SelectedItem.Equals(a.Intitule))
                         {
-                            if (ListActivites.SelectedItem.Equals(a.Intitule))
-                            {
-                                a.Intitule = TextIntitule.Text;
-                                a.Description = TextDescription.Text;
-                                a.Lieu = TextLieu.Text;
-                                a.DateHeureDebut = Convert.ToDateTime(TextDateDebut.Text);
-                                a.DateHeureFin = Convert.ToDateTime(TextDateFin.Text);
-                                a.Occurences = Convert.ToInt32(TextOccurences.Text);
-                                a.Periodicite = Activity.StringToPeriodicite(BoxPeriodicite.Text);
-                                break;
-                            }
+                            a.Intitule = TextIntitule.Text;
+                            a.Description = TextDescription.Text;
+                            a.Lieu = TextLieu.Text;
+                            a.DateHeureDebut = Convert.ToDateTime(TextDateDebut.Text);
+                            a.DateHeureFin = Convert.ToDateTime(TextDateFin.Text);
+                            a.Occurences = Convert.ToInt32(TextOccurences.Text);
+                            a.Periodicite = Activity.StringToPeriodicite(BoxPeriodicite.Text);
+                            break;
                         }
                     }
-                    else
-                        MessageBox.Show("Incohérence entre la date de début et la date de fin", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                catch (System.FormatException) { } 
+                else
+                    MessageBox.Show("Incohérence entre la date de début et la date de fin", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            catch (System.NullReferenceException) { } 
-            //}
-            //else
-            //    MessageBox.Show("Veuillez remplir les champs pour créer une activité", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            catch (System.FormatException) { } 
+            catch (NullReferenceException) { } 
 
 
             // supprime les éléments de la listBox 
             ListActivites.Items.Clear();
+
+            Tri_OC(listAct); // on trie la liste (ObservableCollection) 
 
             // on remet la listActivites a jour 
             foreach (Activity a in listAct)
@@ -475,6 +501,22 @@ namespace Activity_Manager
             RecupInfoListAct(listAct); 
         }
 
+        public void Tri_OC(ObservableCollection<Activity> lact)
+        {
+            List<Activity> tmp = new List<Activity>(); // liste temporaire permettant le tri 
+            tmp = lact.ToList();
+            tmp.Sort();
+
+            // on enleve les elements dans listAct 
+            lact.Clear(); 
+
+            // on ajoute les elements de tmp qui sont donc triés 
+            foreach(Activity a in tmp)
+            {
+                lact.Add(a); 
+            }
+        }
+
         private void Annulation_Click(object sender, RoutedEventArgs e) // clic bouton Annuler 
         {
             ViderChamps();
@@ -523,43 +565,5 @@ namespace Activity_Manager
         }
         #endregion
 
-        #region XML CSV
-        private static void SaveAsXMLFormat(List<Activity> tmp, string filename)
-        {
-            XmlSerializer xmlFormat = new XmlSerializer(typeof(List<Activity>));
-            using (Stream fStream = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None)) // nom, mode creation, permissions, permissions de partage
-            {
-                xmlFormat.Serialize(fStream, tmp);
-            }
-        }
-        private void LoadFromXMLFormat(string filename)
-        {
-            XmlSerializer xmlFormat = new XmlSerializer(typeof(List<Activity>));
-            using (Stream fStream = File.OpenRead(filename))
-            {
-                List<Activity> tmp = (List<Activity>)xmlFormat.Deserialize(fStream);    // récupère info et met dans liste
-                
-                // on copie ce qu'on recupere dans notre liste (ObservableCollection) 
-                foreach(Activity a in tmp)
-                {
-                    listAct.Add(a); 
-                }
-
-                ListActivites.Items.Clear();        // vider la liste d'activités 
-                TabActivites.ItemsSource = null;    // vider le datagrid 
-                TabActivites.Items.Refresh(); 
-
-                // on ajoute les noms dans la liste d'activités 
-                foreach (Activity a in listAct)
-                {
-                    ListActivites.Items.Add(a.Intitule);
-                } 
-
-                TabActivites.ItemsSource = listAct; // ajoute dans datagrid 
-                TabActivites.Items.Refresh();
-            }
-        }
-        #endregion
-        
     }
 }
