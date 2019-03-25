@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Activity_Manager"
         mc:Ignorable="d"
-        Title="Activity Manager" Height="600" Width="1200">
+        Title="Activity Manager" Height="600" Width="1200" MinHeight="550" MinWidth="800">
 
     <DockPanel x:Name="PanelDepart" Background="#FFBEBEBE">
         <Menu x:Name="Menu" DockPanel.Dock="Top">
@@ -79,7 +79,7 @@
                 <ListBox x:Name="ListActivites" Background="#A5967878" MouseDoubleClick="ListActivites_MouseDoubleClick"/> 
             </Grid>
 
-            <Grid x:Name="GridDroiteBas" Grid.Column="1" Grid.Row="1" Background="#A5967878">
+            <Grid x:Name="GridDroiteBas" Grid.Column="1" Grid.Row="1" Background="#A5967878" MinWidth="400">
                 <Label x:Name="RechercheLieu" Content="Rechercher par lieu:" FontSize="12"/>
                 <TextBox x:Name="RechercheLieuText" Height="20" Width="100" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="115,5,0,0"/>
                 <Label x:Name="RechercheDateDeb" Content="Date Début: " FontSize="12" Margin="215,0,0,0"/>
