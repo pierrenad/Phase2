@@ -331,31 +331,39 @@ namespace Activity_Manager
 
         private void Modifier_Click(object sender, RoutedEventArgs e) // clic sur modifier une activité 
         {
-            if (TextIntitule.Text != "" && TextDescription.Text != "" && TextLieu.Text != "" && TextDateDebut.Text != "" && TextDateFin.Text != "" && TextOccurences.Text != "" && BoxPeriodicite.Text != "")
+            //if (TextIntitule.Text != "" && TextDescription.Text != "" && TextLieu.Text != "" && TextDateDebut.Text != "" && TextDateFin.Text != "" && TextOccurences.Text != "" && BoxPeriodicite.Text != "")
+            //{
+            try
             {
-                if (Convert.ToDateTime(TextDateDebut.Text) < Convert.ToDateTime(TextDateFin.Text))
+                try
                 {
-                    // cherche l'activité dans la liste pour la modifier mais modifie pas 
-                    foreach (Activity a in listAct)
+                    if (Convert.ToDateTime(TextDateDebut.Text) < Convert.ToDateTime(TextDateFin.Text))
                     {
-                        if (ListActivites.SelectedItem.Equals(a.Intitule))
+                        // cherche l'activité dans la liste pour la modifier mais modifie pas 
+                        foreach (Activity a in listAct)
                         {
-                            a.Intitule = TextIntitule.Text;
-                            a.Description = TextDescription.Text;
-                            a.Lieu = TextLieu.Text;
-                            a.DateHeureDebut = Convert.ToDateTime(TextDateDebut.Text);
-                            a.DateHeureFin = Convert.ToDateTime(TextDateFin.Text);
-                            a.Occurences = Convert.ToInt32(TextOccurences.Text);
-                            a.Periodicite = Activity.StringToPeriodicite(BoxPeriodicite.Text);
-                            break;
+                            if (ListActivites.SelectedItem.Equals(a.Intitule))
+                            {
+                                a.Intitule = TextIntitule.Text;
+                                a.Description = TextDescription.Text;
+                                a.Lieu = TextLieu.Text;
+                                a.DateHeureDebut = Convert.ToDateTime(TextDateDebut.Text);
+                                a.DateHeureFin = Convert.ToDateTime(TextDateFin.Text);
+                                a.Occurences = Convert.ToInt32(TextOccurences.Text);
+                                a.Periodicite = Activity.StringToPeriodicite(BoxPeriodicite.Text);
+                                break;
+                            }
                         }
                     }
+                    else
+                        MessageBox.Show("Incohérence entre la date de début et la date de fin", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                else
-                    MessageBox.Show("Incohérence entre la date de début et la date de fin", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                catch (System.FormatException) { } 
             }
-            else
-                MessageBox.Show("Veuillez remplir les champs pour créer une activité", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            catch (System.NullReferenceException) { } 
+            //}
+            //else
+            //    MessageBox.Show("Veuillez remplir les champs pour créer une activité", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
 
 
             // supprime les éléments de la listBox 
