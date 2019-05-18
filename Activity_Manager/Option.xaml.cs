@@ -38,7 +38,7 @@ namespace Activity_Manager
             couleurFond2 = (SolidColorBrush)tmp.ListActivites.Foreground; 
         }
 
-        #region BOUTONS_DE_CHOIX
+        #region CHOIX_BUTTONS
         private void DossierChoix_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -61,7 +61,7 @@ namespace Activity_Manager
 
         #endregion
 
-        #region BOUTONS_TERMINER 
+        #region TERMINER_CANCEL_BOUTONS 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
             EventCouleurFond?.Invoke(nomFichier, couleurFond, couleurFond2);
